@@ -1,63 +1,47 @@
 # coordinator.py
 
 import hashlib
-from partition import Partition
-from typing import List
+import json
+from network import send_request
 
 class Coordinator:
     """
     Bertindak sebagai koordinator partisi.
     Mengatur partisi-partisi dan memindahkan permintaan ke partisi yang sesuai.
     """
-    def __init__(self, num_partitions: int, data_dir: str = "data"):
-        if num_partitions <= 0:
-            raise ValueError("Number of partitions must be positive.")
+    def __init__(self, cluster_topology):
+        self.cluster_topology = cluster_topology
+        self.num_partitions = len(cluster_topology['partitions'])
 
-        self.num_partitions = num_partitions
-        self.data_dir = data_dir
-        
-        # Inisialisasi semua partisi yang akan dikelola oleh koordinator ini
-        print(f"Initializing coordinator with {num_partitions} partitions...")
-        self.partitions: List[Partition] = []
-        for i in range(num_partitions):
-            partition = Partition(partition_id=i, data_dir=self.data_dir)
-            self.partitions.append(partition)
-        print("All partitions initialized.")
-
-    def _get_partition_for_key(self, key: str) -> Partition:
-        """
-        Menentukan partisi yang sesuai untuk suatu kunci.
-        """
-        # Gunakan SHA1 untuk hash yang baik, lalu konversi ke integer
+    def _get_leader_for_key(self, key: str):
         hash_val = int(hashlib.sha1(key.encode('utf-8')).hexdigest(), 16)
-        
-        # Terapkan formula: hash(key) % N
         partition_id = hash_val % self.num_partitions
         
-        # Kembalikan instance partisi yang sesuai
-        return self.partitions[partition_id]
+        leader_id = self.cluster_topology['partitions'][partition_id]['leader']
+        leader_info = self.cluster_topology['nodes'][leader_id]
+        return partition_id, leader_info['host'], leader_info['port']
 
     def put(self, key: str, value: any):
-        """
-        Me-route permintaan PUT ke partisi yang sesuai.
-        """
-        target_partition = self._get_partition_for_key(key)
-        print(f"Coordinator: Routing key '{key}' to Partition {target_partition.partition_id}")
-        target_partition.put(key, value)
+        partition_id, host, port = self._get_leader_for_key(key)
+        print(f"Coordinator: Routing PUT key '{key}' to leader of Partition-{partition_id} at {host}:{port}")
+        
+        value_str = json.dumps(value)
+        message = f"PUT {partition_id} {key} {value_str}"
+        return send_request(host, port, message)
 
     def get(self, key: str) -> any:
-        """
-        Me-routing permintaan GET ke partisi yang sesuai.
-        """
-        target_partition = self._get_partition_for_key(key)
-        print(f"Coordinator: Routing key '{key}' to Partition {target_partition.partition_id}")
-        return target_partition.get(key)
-
-    def close(self):
-        """
-        Menutup semua partisi.
-        """
-        print("\nCoordinator: Closing all partitions...")
-        for partition in self.partitions:
-            partition.close()
-        print("Coordinator: All partitions closed.")
+        partition_id, host, port = self._get_leader_for_key(key)
+        print(f"Coordinator: Routing GET key '{key}' to leader of Partition-{partition_id} at {host}:{port}")
+        
+        message = f"GET {partition_id} {key}"
+        response = send_request(host, port, message)
+        
+        if response and response != "NOT_FOUND":
+            return json.loads(response)
+        return None
+    
+    def status(self, key: str):
+        """Me-routing permintaan STATUS ke leader yang sesuai."""
+        p_id, host, port = self._get_leader_for_key(key)
+        message = f"STATUS {p_id} {key}"
+        return send_request(host, port, message)

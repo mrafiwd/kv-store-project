@@ -1,6 +1,7 @@
 # serializer.py
 
 import struct
+import json
 from typing import Any, Dict, Union
 
 class Serializer:
@@ -20,6 +21,13 @@ class Serializer:
             value_bytes = value.encode('utf-8')
             # Format: [version (1b)] [value_len (4b)] [value]
             return struct.pack(f'!B I {len(value_bytes)}s', schema_version, len(value_bytes), value_bytes)
+        elif isinstance(value, dict):
+            schema_version = 3
+            # Ubah dict menjadi string JSON, lalu encode ke bytes
+            value_json_str = json.dumps(value)
+            value_bytes = value_json_str.encode('utf-8')
+            # Format: [versi (1b)] [panjang_json (4b)] [json_string_bytes]
+            return struct.pack(f'!B I {len(value_bytes)}s', schema_version, len(value_bytes), value_bytes)
         else:
             raise TypeError("Value type not supported for encoding.")
 
@@ -35,5 +43,11 @@ class Serializer:
             data_str, = struct.unpack(f'!{data_len}s', value_bytes[5:data_end_offset])
             timestamp, = struct.unpack('!Q', value_bytes[data_end_offset:data_end_offset + 8])
             return {'schema_version': 2, 'data': data_str.decode('utf-8'), 'timestamp': timestamp}
+        elif schema_version == 3:
+            value_len, = struct.unpack('!I', value_bytes[1:5])
+            value_json_str_bytes, = struct.unpack(f'!{value_len}s', value_bytes[5:5 + value_len])
+            # Decode bytes ke string JSON, lalu parse JSON ke dictionary
+            original_dict = json.loads(value_json_str_bytes.decode('utf-8'))
+            return {'schema_version': 3, 'value': original_dict}
         else:
             raise ValueError(f"Unknown schema version: {schema_version}")
