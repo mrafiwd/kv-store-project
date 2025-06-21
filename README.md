@@ -46,15 +46,15 @@ kv-store-project/
 │   ├── node_1/                   # Data spesifik untuk Node 1.
 │   └── node_2/                   # Data spesifik untuk Node 2.
 ├── config.py                     # Konfigurasi utama untuk mendefinisikan topologi cluster.
-├── coordinator.py                # Logika routing yang mengarahkan permintaan klien ke node yang tepat.
-├── main.py                       # Aplikasi utama (klien interaktif CLI) yang dijalankan pengguna.
+├── coordinator.py                # Mengarahkan permintaan klien ke node yang tepat.
+├── main.py                       # Klien interaktif CLI yang dijalankan pengguna.
 ├── network.py                    # Fungsi helper untuk komunikasi jaringan antar node.
-├── node.py                       # Logika untuk sebuah server node, termasuk TCP server.
+├── node.py                       # Logika untuk sebuah server node.
 ├── partition.py                  # Logika inti untuk satu partisi (mengelola Hot & Cold Storage).
 ├── serializer.py                 # Menangani encoding/decoding data dan evolusi skema.
-├── test.py                       # Skrip untuk pengujian otomatis seluruh sistem.
-├── .gitignore                    # Menginstruksikan Git untuk mengabaikan file/folder tertentu.
-└── README.md                     # Dokumentasi proyek (file ini).
+├── test.py                       # Pengujian otomatis seluruh sistem.
+├── .gitignore                    
+└── README.md                     
 ```
 ## Cara Menjalankan
 
