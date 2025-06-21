@@ -58,24 +58,22 @@ kv-store-project/
 ```
 ## Cara Menjalankan
 
-Sistem ini dapat dijalankan dalam dua mode: mode interaktif (CLI) untuk penggunaan manual, dan mode tes untuk verifikasi otomatis.
+Sistem ini dapat dijalankan dalam dua mode: mode interaktif (CLI) secara manual, dan mode tes.
 
 ### Mode Interaktif (Aplikasi Utama)
 
 1.  **Konfigurasi Cluster (Opsional):**
-    Buka `config.py` untuk menyesuaikan jumlah node dan partisi jika diperlukan. Secara default, sistem dikonfigurasi untuk 3 node dan 4 partisi.
-
+    Buka `config.py` untuk menyesuaikan jumlah node dan partisi jika diperlukan.
 2.  **Jalankan Aplikasi Utama:**
     ```bash
     python main.py
     ```
-
 3.  **Menghentikan Sistem:**
     Ketik `exit` atau `quit`.
 
 ### Mode Tes Otomatis
 
-Untuk menjalankan serangkaian tes yang telah ditentukan secara otomatis dan memverifikasi semua fungsionalitas sistem.
+Melakukan serangkaian tes otomatis untuk memverifikasi fungsionalitas sistem.
 
 1.  **Jalankan Skrip Tes:**
     ```bash
