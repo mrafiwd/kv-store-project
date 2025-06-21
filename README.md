@@ -28,10 +28,6 @@ Proyek ini secara praktis menerapkan berbagai teori dari sistem data-intensif:
     * `status <key>`: Memeriksa lokasi data (di memori atau di disk).
     * `inspect <node_id>`: Melihat isi data yang ada di memori sebuah node.
 
-## Prasyarat
-
-* Python 3.13.3 atau versi lebih baru
-
 ## Struktur Direktori
 
 ```
