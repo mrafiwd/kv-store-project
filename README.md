@@ -51,6 +51,7 @@ kv-store-project/
 ├── network.py                    # Fungsi helper untuk komunikasi jaringan antar node.
 ├── node.py                       # Logika untuk sebuah server node.
 ├── partition.py                  # Logika inti untuk satu partisi (mengelola Hot & Cold Storage).
+├── performancetest.py            # Melakukan uji Throughput, Latency, dan Fault Tolerance
 ├── serializer.py                 # Menangani encoding/decoding data dan evolusi skema.
 ├── test.py                       # Pengujian otomatis seluruh sistem.
 ├── .gitignore                    
