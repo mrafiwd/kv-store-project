@@ -27,6 +27,7 @@ Proyek ini secara praktis menerapkan berbagai teori dari sistem data-intensif:
 * **Introspeksi Sistem:**
     * `status <key>`: Memeriksa lokasi data (di memori atau di disk).
     * `inspect <node_id>`: Melihat isi data yang ada di memori sebuah node.
+    * `hex <key>`: Melihat hasil enkoding.
 
 ## Struktur Direktori
 
@@ -121,8 +122,8 @@ get user:101:profile
 status nama
 ```
 ```bash
-inspect 1 # node_id bisa disesuaikan (0, 1, atau 2)
+inspect 1 # node_id bisa disesuaikan (0, 1, atau 2).
 ```
 ```bash
-hex user:101:profile
+hex user:101:profile # Data harus berada di COLD. Bisa dilakukan exit utnuk flush data ke COLD.
 ```
