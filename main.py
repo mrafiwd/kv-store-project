@@ -35,7 +35,7 @@ def run_interactive_mode():
     print("Perintah: get <key>")
     print("Perintah: status <key>                  -> Cek lokasi data (hot/cold)")
     print("Perintah: inspect <node_id>             -> Lihat isi memori (hot) sebuah node")
-    print("Perintah: exit")
+    print("Perintah: exit atau quit")
     print("--------------------------------------------------------------")
 
     while True:

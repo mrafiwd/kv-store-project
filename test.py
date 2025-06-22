@@ -26,10 +26,15 @@ def find_keys_for_partition(target_partition_id, num_keys, num_partitions):
 def run_replication_test():
     print("--- MULAI PENGUJIAN AKHIR (VERSI DINAMIS) ---\n")
     
+    data_dir = "data"
+    if os.path.exists(data_dir):
+        shutil.rmtree(data_dir)
+
     # Hapus direktori data lama untuk semua node yang ada di konfigurasi
     for node_id in CLUSTER_TOPOLOGY['nodes']:
         dir_path = f"data/node_{node_id}"
         if os.path.exists(dir_path): shutil.rmtree(dir_path)
+    
 
     # Jalankan semua node di proses terpisah
     processes = []
