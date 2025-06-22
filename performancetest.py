@@ -43,8 +43,6 @@ def setup_cluster():
 def shutdown_cluster(processes):
     """Mematikan semua node cluster."""
     print("\nShutting down all nodes...")
-    # Di dunia nyata, kita akan menggunakan graceful shutdown, tapi untuk benchmark
-    # terminate() lebih cepat dan bisa diprediksi.
     for p in processes:
         if p.is_alive():
             p.terminate()

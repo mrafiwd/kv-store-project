@@ -25,6 +25,9 @@ class NodeTCPHandler(socketserver.BaseRequestHandler):
                 response = self.server.node.handle_status(p_id, key)
             elif command == 'INSPECT':
                 response = self.server.node.handle_inspect()
+            elif command == 'HEX' and len(parts) == 3:
+                p_id, key = int(parts[1]), parts[2]
+                response = self.server.node.handle_hex(p_id, key)
             elif command == 'SHUTDOWN':
                 self.server.node.close()
                 self.request.sendall(b"SUCCESS: Shutting down.")
@@ -86,6 +89,14 @@ class Node:
             with partition.lock:
                 hot_storage_summary[f"partition_{p_id}"] = list(partition.hot_storage.keys())
         return json.dumps(hot_storage_summary, indent=2)
+    
+    def handle_hex(self, p_id, key):
+        """Menangani permintaan hex dan mendelegasikannya ke partisi."""
+        partition = self.replicas.get(p_id)
+        if partition:
+            raw_bytes = partition.get_raw_value_bytes(key)
+            return raw_bytes.hex() if raw_bytes else "NOT_FOUND"
+        return "ERROR: Partition not found on this node."
 
 def start_node_process(node_id, host, port, topology):
     node = Node(node_id, host, port, topology); node.start_server()

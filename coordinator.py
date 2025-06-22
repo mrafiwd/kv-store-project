@@ -50,3 +50,9 @@ class Coordinator:
         p_id, host, port = self._get_leader_for_key(key)
         message = f"STATUS {p_id} {key}"
         return send_request(host, port, message)
+    
+    def hex(self, key: str):
+        """Me-routing permintaan HEX ke leader yang sesuai."""
+        p_id, host, port = self._get_leader_for_key(key)
+        message = f"HEX {p_id} {key}"
+        return send_request(host, port, message)

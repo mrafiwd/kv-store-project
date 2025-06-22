@@ -35,6 +35,7 @@ def run_interactive_mode():
     print("Perintah: get <key>")
     print("Perintah: status <key>                  -> Cek lokasi data (hot/cold)")
     print("Perintah: inspect <node_id>             -> Lihat isi memori (hot) sebuah node")
+    print("Perintah: hex <key>                     -> Lihat hasil encoding (hexdump)")
     print("Perintah: exit atau quit")
     print("--------------------------------------------------------------")
 
@@ -76,7 +77,13 @@ def run_interactive_mode():
                 key = parts[1]
                 response = coordinator.status(key)
                 print(f"Lokasi: {response}")
-
+            elif command == "hex":
+                if len(parts) != 2:
+                    print("Error: Format -> hex <key>")
+                    continue
+                key = parts[1]
+                response = coordinator.hex(key)
+                print(f"Hexdump: {response}")
             elif command == "inspect":
                 if len(parts) != 2:
                     print("Error: Format -> inspect <node_id>")

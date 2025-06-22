@@ -97,6 +97,29 @@ class Partition:
                 return "COLD_STORAGE"
             else:
                 return "NOT_FOUND"
+    
+    def get_raw_value_bytes(self, key: str) -> bytes:
+        """Mengambil value dalam bentuk bytes mentah dari storage."""
+        with self.lock:
+            # Di hot storage, data belum di-encode, jadi kita encode dulu
+            if key in self.hot_storage:
+                value = self.hot_storage.get(key)
+                if value == self.TOMBSTONE: # Jika ada fitur delete
+                    return self.TOMBSTONE
+                return self.serializer.encode_value(value)
+            
+            # Di cold storage, data sudah dalam bentuk bytes
+            elif key in self.cold_storage_index:
+                offset = self.cold_storage_index[key]
+                with open(self.log_file_path, 'rb') as f:
+                    f.seek(offset)
+                    record_len_bytes = f.read(4)
+                    if not record_len_bytes: return None
+                    record_len, = struct.unpack('!I', record_len_bytes)
+                    record_bytes = f.read(record_len)
+                    key_len, = struct.unpack('!I', record_bytes[:4])
+                    return record_bytes[4 + key_len:]
+        return None
             
     def close(self):
         print(f"Partition-{self.partition_id} on Node-{self.node.node_id}: Flushing remaining data before shutdown...")
