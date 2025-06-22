@@ -89,6 +89,7 @@ Melakukan serangkaian tes otomatis untuk memverifikasi fungsionalitas sistem.
 | `get <key>`         | `get user:101`                                       | Mengambil dan menampilkan nilai dari sebuah kunci.               |
 | `status <key>`      | `status user:101`                                    | Memeriksa lokasi data (di `HOT_STORAGE` atau `COLD_STORAGE`).     |
 | `inspect <node_id>` | `inspect 0`                                          | Menampilkan kunci-kunci yang ada di memori (hot storage) Node 0. |
+| `hex <key>`         | `hex user:101`                                       | Melihat hasil encoding biner  |
 | `exit` atau `quit`  | `exit`                                               | Keluar dari aplikasi dan mematikan semua node.     |
 
 ## Contoh Penggunaan
@@ -120,4 +121,7 @@ status nama
 ```
 ```bash
 inspect 1 # node_id bisa disesuaikan (0, 1, atau 2)
+```
+```bash
+hex user:101:profile
 ```
