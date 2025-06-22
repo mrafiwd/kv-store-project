@@ -36,8 +36,13 @@ class Coordinator:
         message = f"GET {partition_id} {key}"
         response = send_request(host, port, message)
         
-        if response and response != "NOT_FOUND":
+        # Cek jika respons adalah error dari network.py sebelum di-parse
+        if response is None or response.startswith("Error:"):
+            return response # Kembalikan pesan error apa adanya
+
+        if response != "NOT_FOUND":
             return json.loads(response)
+            
         return None
     
     def status(self, key: str):
