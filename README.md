@@ -95,29 +95,29 @@ Melakukan serangkaian tes otomatis untuk memverifikasi fungsionalitas sistem.
 
 #### Menyimpan String (Skema V1)
 ```bash
-> put nama "Rafi Widya"
+put nama "Rafi Widya"
 ```
 ```bash
-> get nama
+get nama
 ```
 #### Menyimpan Event dengan Timestamp (Skema V2)
 ```bash
-> put event:login '{"data": "user:101 login", "timestamp": "2025-06-22 10:30:00"}'
+put event:login '{"data": "user:101 login", "timestamp": "2025-06-22 10:30:00"}'
 ```
 ```bash
-> get event:login
+get event:login
 ```
 #### Menyimpan Kamus/JSON Generik (Skema V3)
 ```bash
-> put user:101:profile '{"jurusan": "Sistem Informasi", "angkatan": 2022}'
+put user:101:profile '{"jurusan": "Sistem Informasi", "angkatan": 2022}'
 ```
 ```bash
-> get user:101:profile
+get user:101:profile
 ```
 #### Menggunakan Fitur Introspeksi
 ```bash
-> status nama
+status nama
 ```
 ```bash
-> inspect 1 # node_id bisa disesuaikan (0, 1, atau 2)
+inspect 1 # node_id bisa disesuaikan (0, 1, atau 2)
 ```
